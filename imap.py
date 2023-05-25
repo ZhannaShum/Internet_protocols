@@ -30,8 +30,8 @@ def get_attachments(msg):
     for part in msg.walk():
         if part.get_content_disposition() is not None:
             filename = decode_str(part.get_filename())
-            if filename is None:  # добавить эту строку
-                filename = "unknown"  # и эту строку
+            if filename is None:
+                filename = "unknown"
             size = len(part.get_payload(decode=True))
             attachments.append((filename, size))
     return attachments
