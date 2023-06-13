@@ -13,7 +13,7 @@ def get_current_time():
     return struct.pack('!I', current_time)
 
 
-def get_response(delay):
+def get_response():
     """
     Формирует ответ сервера на запрос клиента
     """
@@ -27,8 +27,8 @@ def get_response(delay):
     response[12:16] = b'\x00' * 4  # Reference Identifier
     response[16:20] = get_current_time()  # Reference Timestamp
     response[20:24] = get_current_time()  # Originate Timestamp
-    response[24:28] = get_current_time() + delay  # Receive Timestamp
-    response[28:32] = get_current_time() + delay  # Transmit Timestamp
+    response[24:28] = get_current_time()  # Receive Timestamp
+    response[28:32] = get_current_time()  # Transmit Timestamp
     return response
 
 
@@ -47,11 +47,12 @@ def main():
     while True:
         # Ждем запроса от клиента
         data, address = sock.recvfrom(1024)
-        #data, address = sock.recvfrom(1234)
+
         print(f'Client {address[0]} connected.')
 
         # Формируем и отправляем ответ на запрос клиента
-        response = get_response(args.delay)
+        response = get_response()
+        time.sleep(args.delay)  # Задержка перед отправкой ответа
         sock.sendto(response, address)
 
 
